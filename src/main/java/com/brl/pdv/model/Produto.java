@@ -4,16 +4,24 @@ import java.math.BigDecimal;
 
 public class Produto {
 
+	private int codigo;
 	private String descricao;
 	private int quantidade;
 	private BigDecimal preco;
-	private Localidade local;
+	private Localidade localidade;
 
-	public Produto(String descricao, int quantidade, BigDecimal preco, Localidade local) {
+	public Produto(String descricao, int quantidade, BigDecimal preco) {
 		this.descricao = descricao;
 		this.quantidade = quantidade;
 		this.preco = preco;
-		this.local = local;
+	}
+	
+	public int getCodigo() {
+		return codigo;
+	}
+	
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
 	}
 
 	public String getDescricao() {
@@ -40,11 +48,16 @@ public class Produto {
 		this.preco = preco;
 	}
 
-	public Localidade getLocal() {
-		return local;
+	public Localidade getLocalidade() {
+		return localidade;
 	}
 
-	public void setLocal(Localidade local) {
-		this.local = local;
+	public void setLocalidade(Localidade localidade) {
+		this.localidade = localidade;
+	}
+	
+	@Override
+	public String toString() {
+		return String.valueOf(this.codigo);
 	}
 }

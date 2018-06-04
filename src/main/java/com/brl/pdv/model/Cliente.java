@@ -45,4 +45,9 @@ public class Cliente {
 	public void setStatus(char status) {
 		this.status = status;
 	}
+
+	@Override
+	public String toString() {
+		return this.nome;
+	}
 }

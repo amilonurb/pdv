@@ -1,7 +1,6 @@
 package com.brl.pdv.view;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -17,19 +16,7 @@ public class JanelaInicial extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					JanelaInicial frame = new JanelaInicial();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private JanelaNovaVenda janelaNovaVenda = null;
 
 	public JanelaInicial() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,6 +53,11 @@ public class JanelaInicial extends JFrame {
 		panelOpcoes.add(lblEscolhaUmaDas, gbc_lblEscolhaUmaDas);
 
 		JButton btnNovaVenda = new JButton("Nova Venda");
+		btnNovaVenda.addActionListener(event -> {
+			janelaNovaVenda = new JanelaNovaVenda();
+			this.dispose();
+		});
+
 		GridBagConstraints gbc_btnNovaVenda = new GridBagConstraints();
 		gbc_btnNovaVenda.fill = GridBagConstraints.BOTH;
 		gbc_btnNovaVenda.insets = new Insets(0, 0, 5, 5);
@@ -90,6 +82,9 @@ public class JanelaInicial extends JFrame {
 		panelOpcoes.add(btnSair, gbc_btnSair);
 		btnSair.setHorizontalTextPosition(SwingConstants.LEFT);
 		btnSair.setHorizontalAlignment(SwingConstants.LEFT);
+
+		this.setResizable(false);
+		this.setLocationRelativeTo(null);
 	}
 
 }

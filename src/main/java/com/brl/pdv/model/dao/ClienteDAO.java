@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.brl.pdv.model.Cliente;
@@ -42,12 +42,13 @@ public class ClienteDAO implements GenericDAO<Cliente> {
 	}
 
 	@Override
-	public void delete(Cliente cliente) {
+	public void delete(Cliente t) {
+		throw new UnsupportedOperationException("Não implementado ainda.");
 	}
 
 	@Override
 	public List<Cliente> findAll() {
-		List<Cliente> clientes = new LinkedList<>();
+		List<Cliente> clientes = new ArrayList<>();
 		try {
 			sql = "SELECT nome, status, perfil, bonus FROM cliente";
 			connection = ConnectionFactory.getConexao();
@@ -74,26 +75,11 @@ public class ClienteDAO implements GenericDAO<Cliente> {
 
 	@Override
 	public Cliente findByName(String name) {
-		Cliente cliente = null;
-		try {
-			sql = "SELECT nome, status, perfil, bonus FROM cliente LIMIT 1";
-			connection = ConnectionFactory.getConexao();
-			stmt = connection.prepareStatement(sql);
-			rs = stmt.executeQuery();
-			if (rs.next()) {
-				String nome = rs.getString("nome");
-				char status = rs.getString("status").charAt(0);
-				char perfil = rs.getString("perfil").charAt(0);
-				cliente = new Cliente(nome, perfil, status);
-			}
-			rs.close();
-			stmt.close();
-			connection.close();
-		} catch (SQLException e) {
+		throw new UnsupportedOperationException("Não implementado ainda.");
+	}
 
-		} catch (ClassNotFoundException e2) {
-
-		}
-		return cliente;
+	@Override
+	public Cliente findById(int id) {
+		throw new UnsupportedOperationException("Não implementado ainda.");
 	}
 }
