@@ -2,12 +2,12 @@ package com.brl.pdv.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -15,227 +15,240 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.TableColumnModelListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 
 import com.brl.pdv.controller.NovaVendaController;
 import com.brl.pdv.model.Cliente;
+import com.brl.pdv.model.ItemDeVenda;
 import com.brl.pdv.model.Localidade;
 import com.brl.pdv.model.Produto;
-import javax.swing.JScrollPane;
-
-class ItemDeVenda {
-	private Produto produto;
-	private int quantidade;
-
-	public BigDecimal calcularTotal() {
-		BigDecimal resultado = BigDecimal.ZERO;
-		resultado.add(produto.getPreco().multiply(BigDecimal.valueOf(quantidade)));
-		return resultado;
-	}
-}
+import com.brl.pdv.util.FormatadorDinheiro;
 
 public class JanelaNovaVenda extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
 	private JPanel contentPane;
-	private NovaVendaController novaVendaController;
-	private Produto produtoSelecionadoComboBox;
+	private JPanel panelCliente;
+	private JPanel panelProdutos;
+	private JPanel panelTabelaVenda;
+	private JPanel panelTotalCompra;
+	private JScrollPane scrollTabelaVenda;
+
+	private JLabel lblCliente;
+	private JLabel lblLocalidade;
+	private JLabel lblCodigoProduto;
+	private JLabel lblQuantidade;
+	private JLabel lblDescricao;
+	private JLabel lblGetDescricao;
+	private JLabel lblTotalDaCompra;
+	private JLabel labelValorTotal;
+
+	private JComboBox<Cliente> comboBoxCliente;
+	private JComboBox<Localidade> comboBoxLocalidade;
+	private JComboBox<Produto> comboBoxProduto;
+
+	private JSpinner spinnerQtd;
+
+	private GridBagLayout gbl_panelCliente;
+	private GridBagConstraints gbc_lblCliente;
+	private GridBagConstraints gbc_comboBoxCliente;
+	private GridBagConstraints gbc_lblLocalidade;
+	private GridBagConstraints gbc_comboBoxLocalidade;
+
+	private JButton btnInserir;
+	private JButton btnExcluir;
+	private JButton btnCancelar;
+	private JButton btnFinalizarCompra;
+	
+	private JTable tabelaVenda;	private NovaVendaController novaVendaController;
+	private Cliente clienteSelecionado;
+	private Localidade localidadeSelecionada;
+	private Produto produtoSelecionado;
 	private List<ItemDeVenda> itensDeVenda;
+	private BigDecimal totalParcial;
 
 	public JanelaNovaVenda() {
 		novaVendaController = new NovaVendaController();
 		itensDeVenda = new ArrayList<>();
+		totalParcial = BigDecimal.ZERO;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 680, 480);
+		setBounds(100, 100, 740, 530);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		contentPane.setLayout(null);
 
-		JPanel panelCliente = new JPanel();
+		panelCliente = new JPanel();
+		panelCliente.setBounds(10, 11, 704, 45);
 		panelCliente.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "", TitledBorder.CENTER,
 				TitledBorder.TOP, null, new Color(0, 0, 0)));
-		contentPane.add(panelCliente, BorderLayout.NORTH);
-		GridBagLayout gbl_panelCliente = new GridBagLayout();
+		contentPane.add(panelCliente);
+		gbl_panelCliente = new GridBagLayout();
 		gbl_panelCliente.columnWidths = new int[] { 70, 300, 75, 0, 0, 0 };
 		gbl_panelCliente.rowHeights = new int[] { 40, 0 };
 		gbl_panelCliente.columnWeights = new double[] { 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		gbl_panelCliente.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
 		panelCliente.setLayout(gbl_panelCliente);
 
-		JLabel lblCliente = new JLabel("Cliente:");
-		GridBagConstraints gbc_lblCliente = new GridBagConstraints();
+		lblCliente = new JLabel("Cliente:");
+		gbc_lblCliente = new GridBagConstraints();
 		gbc_lblCliente.insets = new Insets(0, 0, 0, 5);
 		gbc_lblCliente.anchor = GridBagConstraints.EAST;
 		gbc_lblCliente.gridx = 0;
 		gbc_lblCliente.gridy = 0;
 		panelCliente.add(lblCliente, gbc_lblCliente);
 
-		JComboBox<Cliente> comboBoxCliente = new JComboBox<>();
-		this.novaVendaController.populaComboBoxClientes(comboBoxCliente);
+		comboBoxCliente = new JComboBox<>();
+		novaVendaController.populaComboBoxClientes(comboBoxCliente);
 		comboBoxCliente.setEditable(false);
-		GridBagConstraints gbc_comboBoxCliente = new GridBagConstraints();
+		gbc_comboBoxCliente = new GridBagConstraints();
 		gbc_comboBoxCliente.insets = new Insets(0, 0, 0, 5);
 		gbc_comboBoxCliente.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBoxCliente.gridx = 1;
 		gbc_comboBoxCliente.gridy = 0;
 		panelCliente.add(comboBoxCliente, gbc_comboBoxCliente);
 
-		JLabel lblLocalidade = new JLabel("Local da venda:");
-		GridBagConstraints gbc_lblLocalidade = new GridBagConstraints();
+		lblLocalidade = new JLabel("Local da venda:");
+		gbc_lblLocalidade = new GridBagConstraints();
 		gbc_lblLocalidade.anchor = GridBagConstraints.WEST;
 		gbc_lblLocalidade.insets = new Insets(0, 0, 0, 5);
 		gbc_lblLocalidade.gridx = 2;
 		gbc_lblLocalidade.gridy = 0;
 		panelCliente.add(lblLocalidade, gbc_lblLocalidade);
 
-		JComboBox<Localidade> comboBoxLocalidade = new JComboBox<>();
+		comboBoxLocalidade = new JComboBox<>();
 		this.novaVendaController.populaComboBoxLocalidades(comboBoxLocalidade);
 		comboBoxLocalidade.setEditable(false);
-		GridBagConstraints gbc_comboBoxLocalidade = new GridBagConstraints();
+		gbc_comboBoxLocalidade = new GridBagConstraints();
 		gbc_comboBoxLocalidade.insets = new Insets(0, 0, 0, 5);
 		gbc_comboBoxLocalidade.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBoxLocalidade.gridx = 3;
 		gbc_comboBoxLocalidade.gridy = 0;
 		panelCliente.add(comboBoxLocalidade, gbc_comboBoxLocalidade);
 
-		JPanel panelProdutos = new JPanel();
+		panelProdutos = new JPanel();
+		panelProdutos.setBounds(10, 67, 704, 120);
 		panelProdutos.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Escolher Produto",
 				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		contentPane.add(panelProdutos, BorderLayout.CENTER);
-		GridBagLayout gbl_panelProdutos = new GridBagLayout();
-		gbl_panelProdutos.columnWidths = new int[] { 100, 120, 0, 80, 90, 80, 0, 90, 45, 0, 0 };
-		gbl_panelProdutos.rowHeights = new int[] { 0, 40, 40, 0, 0 };
-		gbl_panelProdutos.columnWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
-				Double.MIN_VALUE };
-		gbl_panelProdutos.rowWeights = new double[] { 1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-		panelProdutos.setLayout(gbl_panelProdutos);
+		contentPane.add(panelProdutos);
+		panelProdutos.setLayout(null);
 
-		JLabel lblCodigoProduto = new JLabel("Código do Produto:");
-		GridBagConstraints gbc_lblCodigoProduto = new GridBagConstraints();
-		gbc_lblCodigoProduto.anchor = GridBagConstraints.EAST;
-		gbc_lblCodigoProduto.insets = new Insets(0, 0, 5, 5);
-		gbc_lblCodigoProduto.gridx = 1;
-		gbc_lblCodigoProduto.gridy = 1;
-		panelProdutos.add(lblCodigoProduto, gbc_lblCodigoProduto);
+		lblCodigoProduto = new JLabel("Código do Produto:");
+		lblCodigoProduto.setBounds(31, 35, 109, 14);
+		panelProdutos.add(lblCodigoProduto);
 
-		JComboBox<Produto> comboBoxProduto = new JComboBox<>();
+		comboBoxProduto = new JComboBox<>();
+		comboBoxProduto.setBounds(150, 32, 105, 20);
 		this.novaVendaController.populaComboBoxProdutos(comboBoxProduto);
 		comboBoxProduto.setEditable(false);
-		GridBagConstraints gbc_comboBox_2 = new GridBagConstraints();
-		gbc_comboBox_2.gridwidth = 2;
-		gbc_comboBox_2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBox_2.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBox_2.gridx = 2;
-		gbc_comboBox_2.gridy = 1;
-		panelProdutos.add(comboBoxProduto, gbc_comboBox_2);
+		panelProdutos.add(comboBoxProduto);
 
-		JLabel lblQuantidade = new JLabel("Quantidade:");
-		GridBagConstraints gbc_lblQuantidade = new GridBagConstraints();
-		gbc_lblQuantidade.anchor = GridBagConstraints.EAST;
-		gbc_lblQuantidade.insets = new Insets(0, 0, 5, 5);
-		gbc_lblQuantidade.gridx = 4;
-		gbc_lblQuantidade.gridy = 1;
-		panelProdutos.add(lblQuantidade, gbc_lblQuantidade);
+		lblQuantidade = new JLabel("Quantidade:");
+		lblQuantidade.setBounds(265, 35, 75, 14);
+		panelProdutos.add(lblQuantidade);
 
-		JSpinner spinner = new JSpinner();
-		GridBagConstraints gbc_spinner = new GridBagConstraints();
-		gbc_spinner.fill = GridBagConstraints.HORIZONTAL;
-		gbc_spinner.insets = new Insets(0, 0, 5, 5);
-		gbc_spinner.gridx = 5;
-		gbc_spinner.gridy = 1;
-		panelProdutos.add(spinner, gbc_spinner);
+		spinnerQtd = new JSpinner();
+		spinnerQtd.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+		spinnerQtd.setValue(1);
+		spinnerQtd.setBounds(350, 32, 75, 20);
+		panelProdutos.add(spinnerQtd);
 
-		JButton btnInserir = new JButton("Inserir");
-		GridBagConstraints gbc_btnInserir = new GridBagConstraints();
-		gbc_btnInserir.gridwidth = 2;
-		gbc_btnInserir.fill = GridBagConstraints.VERTICAL;
-		gbc_btnInserir.insets = new Insets(0, 0, 5, 5);
-		gbc_btnInserir.gridx = 7;
-		gbc_btnInserir.gridy = 1;
-		panelProdutos.add(btnInserir, gbc_btnInserir);
+		btnInserir = new JButton("Inserir");
+		btnInserir.setBounds(450, 25, 108, 35);
+		panelProdutos.add(btnInserir);
 
-		JLabel lblDescrio = new JLabel("Descrição:");
-		GridBagConstraints gbc_lblDescrio = new GridBagConstraints();
-		gbc_lblDescrio.anchor = GridBagConstraints.EAST;
-		gbc_lblDescrio.insets = new Insets(0, 0, 5, 5);
-		gbc_lblDescrio.gridx = 1;
-		gbc_lblDescrio.gridy = 2;
-		panelProdutos.add(lblDescrio, gbc_lblDescrio);
+		lblDescricao = new JLabel("Descrição:");
+		lblDescricao.setBounds(31, 75, 80, 14);
+		panelProdutos.add(lblDescricao);
 
-		JLabel lblDescricao = new JLabel("");
-		GridBagConstraints gbc_lblDescricao = new GridBagConstraints();
-		gbc_lblDescricao.gridwidth = 5;
-		gbc_lblDescricao.insets = new Insets(0, 0, 5, 5);
-		gbc_lblDescricao.gridx = 2;
-		gbc_lblDescricao.gridy = 2;
-		panelProdutos.add(lblDescricao, gbc_lblDescricao);
-
-		JButton btnExcluir = new JButton("Excluir");
+		btnExcluir = new JButton("Excluir");
+		btnExcluir.setBounds(580, 25, 108, 35);
 		btnExcluir.setEnabled(false);
-		GridBagConstraints gbc_btnExcluir = new GridBagConstraints();
-		gbc_btnExcluir.gridwidth = 2;
-		gbc_btnExcluir.fill = GridBagConstraints.VERTICAL;
-		gbc_btnExcluir.insets = new Insets(0, 0, 5, 5);
-		gbc_btnExcluir.gridx = 7;
-		gbc_btnExcluir.gridy = 2;
-		panelProdutos.add(btnExcluir, gbc_btnExcluir);
+		panelProdutos.add(btnExcluir);
 
-		JPanel panelVenda = new JPanel();
-		panelVenda.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Detalhes da Compra",
-				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		contentPane.add(panelVenda, BorderLayout.SOUTH);
-		GridBagLayout gbl_panelVenda = new GridBagLayout();
-		gbl_panelVenda.columnWidths = new int[] { 380, 120, 110, 100, 0 };
-		gbl_panelVenda.rowHeights = new int[] { 160, 50, 20, 0, 0 };
-		gbl_panelVenda.columnWeights = new double[] { 1.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
-		gbl_panelVenda.rowWeights = new double[] { 1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-		panelVenda.setLayout(gbl_panelVenda);
-		
-				JLabel lblTotalParcial = new JLabel("Total parcial:");
-				GridBagConstraints gbc_lblTotalParcial = new GridBagConstraints();
-				gbc_lblTotalParcial.anchor = GridBagConstraints.EAST;
-				gbc_lblTotalParcial.insets = new Insets(0, 0, 5, 5);
-				gbc_lblTotalParcial.gridx = 0;
-				gbc_lblTotalParcial.gridy = 2;
-				panelVenda.add(lblTotalParcial, gbc_lblTotalParcial);
-				
-						JLabel lblGrana = new JLabel("Grana");
-						GridBagConstraints gbc_lblGrana = new GridBagConstraints();
-						gbc_lblGrana.insets = new Insets(0, 0, 5, 5);
-						gbc_lblGrana.gridx = 1;
-						gbc_lblGrana.gridy = 2;
-						panelVenda.add(lblGrana, gbc_lblGrana);
-						
-								JButton btnFinalizarCompra = new JButton("Finalizar compra");
-								GridBagConstraints gbc_btnFinalizarCompra = new GridBagConstraints();
-								gbc_btnFinalizarCompra.insets = new Insets(0, 0, 5, 0);
-								gbc_btnFinalizarCompra.fill = GridBagConstraints.VERTICAL;
-								gbc_btnFinalizarCompra.gridwidth = 2;
-								gbc_btnFinalizarCompra.gridx = 2;
-								gbc_btnFinalizarCompra.gridy = 2;
-								panelVenda.add(btnFinalizarCompra, gbc_btnFinalizarCompra);
+		lblGetDescricao = new JLabel("");
+		lblGetDescricao.setBounds(121, 75, 567, 14);
+		panelProdutos.add(lblGetDescricao);
 
-		this.setResizable(false);
-		this.setLocationRelativeTo(null);
-		this.setVisible(true);
+		panelTabelaVenda = new JPanel();
+		panelTabelaVenda.setBounds(10, 198, 704, 220);
+		panelTabelaVenda.setLayout(new BorderLayout(0, 0));
+		contentPane.add(panelTabelaVenda);
+		tabelaVenda = new JTable();
+		tabelaVenda.setModel(new DefaultTableModel(new Object[][] {},
+				new String[] { "Descrição", "Quantidade", "Preço 1x", "Total" }));
+		scrollTabelaVenda = new JScrollPane();
+		scrollTabelaVenda.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		scrollTabelaVenda.setViewportView(tabelaVenda);
+		panelTabelaVenda.add(scrollTabelaVenda);
+
+		panelTotalCompra = new JPanel();
+		panelTotalCompra.setBounds(10, 429, 704, 58);
+		contentPane.add(panelTotalCompra);
+		panelTotalCompra.setLayout(null);
+
+		lblTotalDaCompra = new JLabel("Total da Compra:");
+		lblTotalDaCompra.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblTotalDaCompra.setBounds(0, 11, 200, 38);
+		panelTotalCompra.add(lblTotalDaCompra);
+
+		btnCancelar = new JButton("Cancelar");
+		btnCancelar.setBounds(614, 9, 85, 40);
+		panelTotalCompra.add(btnCancelar);
+
+		btnFinalizarCompra = new JButton("Finalizar Compra");
+		btnFinalizarCompra.setBounds(445, 9, 140, 40);
+		panelTotalCompra.add(btnFinalizarCompra);
+
+		comboBoxCliente.setSelectedItem(0);
+		clienteSelecionado = (Cliente) comboBoxCliente.getSelectedItem();
+		comboBoxCliente.addActionListener(event -> clienteSelecionado = (Cliente) comboBoxCliente.getSelectedItem());
+		comboBoxLocalidade.setSelectedItem(0);
+		localidadeSelecionada = (Localidade) comboBoxLocalidade.getSelectedItem();
+		comboBoxProduto.setSelectedItem(0);
+		produtoSelecionado = (Produto) comboBoxProduto.getSelectedItem();
+		lblGetDescricao.setText(produtoSelecionado.getDescricao());
+		labelValorTotal.setText(FormatadorDinheiro.formata(totalParcial));
+		initListeners();
+	}
+
+	private void initListeners() {
+		comboBoxLocalidade
+				.addActionListener(event -> localidadeSelecionada = (Localidade) comboBoxLocalidade.getSelectedItem());
 
 		comboBoxProduto.addItemListener(event -> {
-			produtoSelecionadoComboBox = (Produto) comboBoxProduto.getSelectedItem();
-			lblDescricao.setText(produtoSelecionadoComboBox.getDescricao());
+			produtoSelecionado = (Produto) comboBoxProduto.getSelectedItem();
+			lblDescricao.setText(produtoSelecionado.getDescricao());
 		});
+
+		btnInserir.addActionListener(inserir -> {
+			produtoSelecionado = (Produto) comboBoxProduto.getSelectedItem();
+			int qtd = (int) (spinnerQtd.getValue());
+			ItemDeVenda itemDeVenda = new ItemDeVenda(produtoSelecionado, qtd);
+			itensDeVenda.add(itemDeVenda);
+			atualizarTabela();
+		});
+		
+		
+	}
+
+	private void atualizarTabela() {
+		DefaultTableModel modelo = (DefaultTableModel) tabelaVenda.getModel();
+		modelo.setRowCount(0);
+		for (ItemDeVenda itemDeVenda : itensDeVenda) {
+			modelo.addRow(new Object[] { itemDeVenda.getProduto().getDescricao(), itemDeVenda.getQuantidade(),
+					itemDeVenda.getProduto().getPreco(), FormatadorDinheiro.formata(itemDeVenda.calcularTotal()) });
+		}
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.brl.pdv.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.swing.JComboBox;
@@ -18,7 +19,7 @@ public class NovaVendaController {
 	private LocalidadeDAO localidadeDAO;
 	private ProdutoDAO produtoDAO;
 	private VendaDAO vendaDAO;
-	
+
 	private List<Cliente> clientes;
 	private List<Localidade> localidades;
 	private List<Produto> produtos;
@@ -44,5 +45,8 @@ public class NovaVendaController {
 		produtos = this.produtoDAO.findAll();
 		produtos.forEach(produto -> comboBoxProdutos.addItem(produto));
 	}
-
+	
+	public BigDecimal calcularTotalParcial(List<BigDecimal> totaisParciais) {
+		return null;
+	}
 }
