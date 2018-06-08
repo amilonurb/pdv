@@ -14,64 +14,64 @@ import com.brl.pdv.model.dao.conexao.ConnectionFactory;
 
 public class ProdutoDAO implements GenericDAO<Produto> {
 
-	private String sql;
-	private PreparedStatement stmt;
-	private ResultSet rs;
-	private Connection connection;
-	private LocalidadeDAO localidadeDAO;
-	
-	public ProdutoDAO() {
-	}
+    private String sql;
+    private PreparedStatement stmt;
+    private ResultSet rs;
+    private Connection connection;
+    private LocalidadeDAO localidadeDAO;
 
-	@Override
-	public void insert(Produto produto) {
-		throw new UnsupportedOperationException("Não implementado ainda.");
-	}
+    public ProdutoDAO() {
+    }
 
-	@Override
-	public void delete(Produto produto) {
-		throw new UnsupportedOperationException("Não implementado ainda.");
-	}
-	
-	@Override
-	public Produto findById(int id) {
-		throw new UnsupportedOperationException("Não implementado ainda.");
-	}
+    @Override
+    public void insert(Produto produto) {
+        throw new UnsupportedOperationException("Não implementado ainda.");
+    }
 
-	@Override
-	public Produto findByName(String name) {
-		throw new UnsupportedOperationException("Não implementado ainda.");
-	}
+    @Override
+    public void delete(Produto produto) {
+        throw new UnsupportedOperationException("Não implementado ainda.");
+    }
 
-	@Override
-	public List<Produto> findAll() {
-		List<Produto> produtos = new ArrayList<>();
-		try {
-			sql = "SELECT * FROM produto";
-			connection = ConnectionFactory.getConexao();
-			stmt = connection.prepareStatement(sql);
-			rs = stmt.executeQuery();
-			Produto produto = null;
-			localidadeDAO = new LocalidadeDAO();
-			while (rs.next()) {
-				int codigo = rs.getInt("codprod");
-				String descricao = rs.getString("descricao");
-				int quantidade = rs.getInt("qtd_estoque");
-				BigDecimal preco = rs.getBigDecimal("preco_unitario");
-				produto = new Produto(descricao, quantidade, preco);
-				produto.setCodigo(codigo);
-				Localidade localidade = localidadeDAO.findById(rs.getInt("codlocal"));
-				produto.setLocalidade(localidade);
-				produtos.add(produto);
-			}
-			rs.close();
-			stmt.close();
-			connection.close();
-		} catch (SQLException e) {
+    @Override
+    public Produto findById(int id) {
+        throw new UnsupportedOperationException("Não implementado ainda.");
+    }
 
-		} catch (ClassNotFoundException e2) {
+    @Override
+    public Produto findByName(String name) {
+        throw new UnsupportedOperationException("Não implementado ainda.");
+    }
 
-		}
-		return produtos;
-	}
+    @Override
+    public List<Produto> findAll() {
+        List<Produto> produtos = new ArrayList<>();
+        try {
+            sql = "SELECT * FROM produto";
+            connection = ConnectionFactory.getConexao();
+            stmt = connection.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            Produto produto = null;
+            localidadeDAO = new LocalidadeDAO();
+            while (rs.next()) {
+                int codigo = rs.getInt("codprod");
+                String descricao = rs.getString("descricao");
+                int quantidade = rs.getInt("qtd_estoque");
+                BigDecimal preco = rs.getBigDecimal("preco_unitario");
+                produto = new Produto(descricao, quantidade, preco);
+                produto.setCodigo(codigo);
+                Localidade localidade = localidadeDAO.findById(rs.getInt("codlocal"));
+                produto.setLocalidade(localidade);
+                produtos.add(produto);
+            }
+            rs.close();
+            stmt.close();
+            connection.close();
+        } catch (SQLException e) {
+
+        } catch (ClassNotFoundException e2) {
+
+        }
+        return produtos;
+    }
 }
