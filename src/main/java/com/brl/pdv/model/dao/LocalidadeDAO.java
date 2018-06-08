@@ -46,6 +46,11 @@ public class LocalidadeDAO implements GenericDAO<Localidade> {
     }
 
     @Override
+    public Localidade find(Localidade localidade) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public Localidade findById(int id) {
         Localidade localidade = null;
         try {

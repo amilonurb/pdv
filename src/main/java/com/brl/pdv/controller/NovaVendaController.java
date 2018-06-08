@@ -31,17 +31,17 @@ public class NovaVendaController {
         vendaDAO = new VendaDAO();
     }
 
-    public void populaComboBoxClientes(JComboBox<Cliente> comboBoxCliente) {
+    public void popularComboBoxClientes(JComboBox<Cliente> comboBoxCliente) {
         clientes = this.clienteDAO.findAll();
         clientes.forEach(cliente -> comboBoxCliente.addItem(cliente));
     }
 
-    public void populaComboBoxLocalidades(JComboBox<Localidade> comboBoxLocalidade) {
+    public void popularComboBoxLocalidades(JComboBox<Localidade> comboBoxLocalidade) {
         localidades = this.localidadeDAO.findAll();
         localidades.forEach(localidade -> comboBoxLocalidade.addItem(localidade));
     }
 
-    public void populaComboBoxProdutos(JComboBox<Produto> comboBoxProdutos) {
+    public void popularComboBoxProdutos(JComboBox<Produto> comboBoxProdutos) {
         produtos = this.produtoDAO.findAll();
         produtos.forEach(produto -> comboBoxProdutos.addItem(produto));
     }

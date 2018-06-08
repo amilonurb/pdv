@@ -47,6 +47,21 @@ public class ClienteDAO implements GenericDAO<Cliente> {
     }
 
     @Override
+    public Cliente find(Cliente cliente) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Cliente findByName(String name) {
+        throw new UnsupportedOperationException("Não implementado ainda.");
+    }
+
+    @Override
+    public Cliente findById(int id) {
+        throw new UnsupportedOperationException("Não implementado ainda.");
+    }
+    
+    @Override
     public List<Cliente> findAll() {
         List<Cliente> clientes = new ArrayList<>();
         try {
@@ -71,15 +86,5 @@ public class ClienteDAO implements GenericDAO<Cliente> {
 
         }
         return clientes;
-    }
-
-    @Override
-    public Cliente findByName(String name) {
-        throw new UnsupportedOperationException("Não implementado ainda.");
-    }
-
-    @Override
-    public Cliente findById(int id) {
-        throw new UnsupportedOperationException("Não implementado ainda.");
     }
 }

@@ -110,7 +110,7 @@ public class JanelaNovaVenda extends JFrame {
         panelCliente.add(lblCliente, gbc_lblCliente);
 
         comboBoxCliente = new JComboBox<>();
-        novaVendaController.populaComboBoxClientes(comboBoxCliente);
+        novaVendaController.popularComboBoxClientes(comboBoxCliente);
         comboBoxCliente.setEditable(false);
         gbc_comboBoxCliente = new GridBagConstraints();
         gbc_comboBoxCliente.insets = new Insets(0, 0, 0, 5);
@@ -128,7 +128,7 @@ public class JanelaNovaVenda extends JFrame {
         panelCliente.add(lblLocalidade, gbc_lblLocalidade);
 
         comboBoxLocalidade = new JComboBox<>();
-        this.novaVendaController.populaComboBoxLocalidades(comboBoxLocalidade);
+        this.novaVendaController.popularComboBoxLocalidades(comboBoxLocalidade);
         comboBoxLocalidade.setEditable(false);
         gbc_comboBoxLocalidade = new GridBagConstraints();
         gbc_comboBoxLocalidade.insets = new Insets(0, 0, 0, 5);
@@ -150,7 +150,7 @@ public class JanelaNovaVenda extends JFrame {
 
         comboBoxProduto = new JComboBox<>();
         comboBoxProduto.setBounds(150, 32, 105, 20);
-        this.novaVendaController.populaComboBoxProdutos(comboBoxProduto);
+        this.novaVendaController.popularComboBoxProdutos(comboBoxProduto);
         comboBoxProduto.setEditable(false);
         panelProdutos.add(comboBoxProduto);
 

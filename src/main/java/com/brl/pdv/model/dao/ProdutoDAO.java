@@ -34,6 +34,28 @@ public class ProdutoDAO implements GenericDAO<Produto> {
     }
 
     @Override
+    public Produto find(Produto produto) {
+        try {
+            sql = "SELECT * FROM produto WHERE codprod = ?";
+            connection = ConnectionFactory.getConexao();
+            stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, produto.getCodigo());
+            rs = stmt.executeQuery();
+            if (!rs.next()) {
+                return null;
+            }
+            rs.close();
+            stmt.close();
+            connection.close();
+        } catch (SQLException e) {
+
+        } catch (ClassNotFoundException e2) {
+
+        }
+        return produto;
+    }
+    
+    @Override
     public Produto findById(int id) {
         throw new UnsupportedOperationException("Não implementado ainda.");
     }
