@@ -8,6 +8,6 @@ Padrões utilizados: DAO (Data Access Object) + MVC (Model-View-Controller).
 
 # Melhorias / Pretensões
 - Persistência com JPA e Hibernate
-- Interface Gráfica com JavaFX - ou Electron, quem sabe :)
+- Interface Gráfica com JavaFX :)
 
 Em construção...
