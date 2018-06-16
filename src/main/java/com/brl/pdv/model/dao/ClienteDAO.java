@@ -38,7 +38,7 @@ public class ClienteDAO {
 			}
 			rs.close();
 			stmt.close();
-			connection.close();
+//			connection.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			JOptionPane.showMessageDialog(null,
 					"Erro ao tentar executar tarefa\nDescrição do erro: " + e.getLocalizedMessage());
@@ -46,7 +46,7 @@ public class ClienteDAO {
 		return clientes;
 	}
 
-	public Cliente descontarBonus(Cliente cliente) {
+	public Cliente descontarBonus(Cliente cliente) throws SQLException {
 		Cliente clienteAtualizado = null;
 		try {
 			sql = "UPDATE cliente SET bonus = ? WHERE codcli = ?";
@@ -61,11 +61,18 @@ public class ClienteDAO {
 			connection.commit();
 			rs.close();
 			stmt.close();
-			connection.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			JOptionPane.showMessageDialog(null,
 					"Erro ao tentar executar tarefa\nDescrição do erro: " + e.getLocalizedMessage());
-			return null;
+			connection.rollback();
+		} finally {
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null,
+						"Erro ao tentar encerrar conexão com o banco de dados.\nDescrição do erro: "
+								+ e.getLocalizedMessage());
+			}
 		}
 		return clienteAtualizado;
 	}

@@ -44,7 +44,7 @@ public class ProdutoDAO {
 			}
 			rs.close();
 			stmt.close();
-			connection.close();
+			// connection.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			JOptionPane.showMessageDialog(null,
 					"Erro ao tentar executar tarefa\nDescrição do erro: " + e.getLocalizedMessage());
@@ -52,7 +52,7 @@ public class ProdutoDAO {
 		return produtos;
 	}
 
-	public Produto update(Produto produto, int quantidade) {
+	public Produto update(Produto produto, int quantidade) throws SQLException {
 		Produto produtoAtualizado = null;
 		try {
 			sql = "UPDATE produto SET qtd_estoque = ? WHERE codprod = ?";
@@ -69,11 +69,18 @@ public class ProdutoDAO {
 			connection.commit();
 			rs.close();
 			stmt.close();
-			connection.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			JOptionPane.showMessageDialog(null,
 					"Erro ao tentar executar tarefa\nDescrição do erro: " + e.getLocalizedMessage());
-			return null;
+			connection.rollback();
+		} finally {
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null,
+						"Erro ao tentar encerrar conexão com o banco de dados.\nDescrição do erro: "
+								+ e.getLocalizedMessage());
+			}
 		}
 		return produtoAtualizado;
 	}
@@ -81,13 +88,13 @@ public class ProdutoDAO {
 	public Produto findById(int codigo) {
 		Produto produto = null;
 		try {
-			sql = "SELECT * FROM produto WHERE codprod = ? LIMIT 1";
+			sql = "SELECT * FROM produto WHERE codprod = ?";
 			connection = ConnectionFactory.getConexao();
 			stmt = connection.prepareStatement(sql);
 			stmt.setInt(1, codigo);
 			rs = stmt.executeQuery();
 			localidadeDAO = new LocalidadeDAO();
-			while (rs.next()) {
+			if (rs.next()) {
 				int codigoProduto = rs.getInt("codprod");
 				String descricao = rs.getString("descricao");
 				int quantidade = rs.getInt("qtd_estoque");
@@ -100,11 +107,10 @@ public class ProdutoDAO {
 			}
 			rs.close();
 			stmt.close();
-			connection.close();
-		} catch (SQLException e) {
-			return null;
-		} catch (ClassNotFoundException e2) {
-			return null;
+			// connection.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			JOptionPane.showMessageDialog(null,
+					"Erro ao tentar executar tarefa\nDescrição do erro: " + e.getLocalizedMessage());
 		}
 		return produto;
 	}

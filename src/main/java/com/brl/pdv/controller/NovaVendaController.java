@@ -1,5 +1,6 @@
 package com.brl.pdv.controller;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 
@@ -48,7 +49,7 @@ public class NovaVendaController {
 		produtos.forEach(produto -> comboBoxProdutos.addItem(produto));
 	}
 
-	public Venda cadastrarVenda(Cliente cliente, Localidade localidade, Produto produto, int qtd) {
+	public Venda cadastrarVenda(Cliente cliente, Localidade localidade, Produto produto, int qtd) throws SQLException {
 		return vendaDAO.insert(cliente, localidade, produto, qtd);
 	}
 }

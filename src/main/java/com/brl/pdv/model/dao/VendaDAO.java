@@ -24,16 +24,17 @@ public class VendaDAO {
 	private ProdutoDAO produtoDAO;
 	private ClienteDAO clienteDAO;
 
-	public Venda insert(Cliente cliente, Localidade localidade, Produto produto, int quantidade) {
+	public Venda insert(Cliente cliente, Localidade localidade, Produto produto, int quantidade) throws SQLException {
 		Venda venda = null;
 		try {
 			produtoDAO = new ProdutoDAO();
-			if (produtoDAO.findById(produto.getCodigo()) == null) {
+			Produto produto2 = produtoDAO.findById(produto.getCodigo());
+			if (produto2 == null) {
 				JOptionPane.showMessageDialog(null, "Produto não encontrado");
 				return null;
 			}
 
-			if (quantidade > produtoDAO.findById(produto.getCodigo()).getQuantidade()) {
+			if (quantidade > produto2.getQuantidade()) {
 				JOptionPane.showMessageDialog(null, "Estoque insuficiente");
 				return null;
 			}
@@ -64,29 +65,29 @@ public class VendaDAO {
 			clienteDAO.descontarBonus(cliente);
 			connection.commit();
 			stmt.close();
-			connection.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			JOptionPane.showMessageDialog(null,
 					"Erro ao tentar executar tarefa\nDescrição do erro: " + e.getLocalizedMessage());
-			return null;
+			connection.rollback();
+		} finally {
+			connection.setAutoCommit(true);
 		}
 		return venda;
 	}
 
 	private BigDecimal calcularValorTotal(Produto produto, Cliente cliente, int quantidade, BigDecimal total) {
-		BigDecimal totalAtualizado = total;
 		if (cliente.getBonus() >= 100) {
 			DescontoDAO descontoDAO = new DescontoDAO();
 			Desconto desconto = descontoDAO.getDesconto(produto, quantidade);
 			if (desconto == null) {
-				return totalAtualizado;
+				return total;
 			} else {
-				BigDecimal result = totalAtualizado.multiply(BigDecimal.valueOf(desconto.getPercentual() * 0.01));
-				BigDecimal result2 = totalAtualizado.subtract(result);
+				BigDecimal result = total.multiply(BigDecimal.valueOf(desconto.getPercentual() * 0.01));
+				BigDecimal result2 = total.subtract(result);
 				return result2;
 			}
 		}
-		return totalAtualizado;
+		return total;
 	}
 
 }

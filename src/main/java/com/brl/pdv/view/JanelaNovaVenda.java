@@ -14,6 +14,7 @@ import java.awt.SystemColor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -293,8 +294,16 @@ public class JanelaNovaVenda extends JFrame {
 		btnInserir.addActionListener(inserir -> {
 			produtoSelecionado = (Produto) comboBoxProduto.getSelectedItem();
 			int qtd = (int) (spinnerQtd.getValue());
-			Venda itemDeVenda = novaVendaController.cadastrarVenda(clienteSelecionado, localidadeSelecionada,
-					produtoSelecionado, qtd);
+
+			Venda itemDeVenda = null;
+			try {
+				itemDeVenda = novaVendaController.cadastrarVenda(clienteSelecionado, localidadeSelecionada,
+						produtoSelecionado, qtd);
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(this, "Falha ao cadastrar venda.\nDetalhes: " + e.getLocalizedMessage());
+				return;
+			}
+
 			if (itemDeVenda == null) {
 				JOptionPane.showMessageDialog(this, "Falha ao efetuar venda");
 			} else {

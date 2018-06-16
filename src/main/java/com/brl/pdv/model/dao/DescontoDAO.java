@@ -36,11 +36,10 @@ public class DescontoDAO {
 			}
 			rs.close();
 			stmt.close();
-			connection.close();
+//			connection.close();
 		} catch (SQLException | ClassNotFoundException e) {
 			JOptionPane.showMessageDialog(null,
 					"Erro ao tentar executar tarefa\nDescrição do erro: " + e.getLocalizedMessage());
-			return null;
 		}
 		return desconto;
 	}
