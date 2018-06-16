@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: 10-Jun-2018 às 03:31
+-- Generation Time: 16-Jun-2018 às 03:43
 -- Versão do servidor: 5.6.35
 -- PHP Version: 7.1.1
 
@@ -27,6 +27,8 @@ USE `pdv`;
 --
 -- Estrutura da tabela `cliente`
 --
+-- Criação: 31-Maio-2018 às 22:56
+--
 
 DROP TABLE IF EXISTS `cliente`;
 CREATE TABLE IF NOT EXISTS `cliente` (
@@ -43,11 +45,6 @@ CREATE TABLE IF NOT EXISTS `cliente` (
 --
 
 --
--- Truncate table before insert `cliente`
---
-
-TRUNCATE TABLE `cliente`;
---
 -- Extraindo dados da tabela `cliente`
 --
 
@@ -62,6 +59,8 @@ INSERT INTO `cliente` (`codcli`, `nome`, `bonus`, `perfil`, `status`) VALUES
 
 --
 -- Estrutura da tabela `desconto`
+--
+-- Criação: 31-Maio-2018 às 23:43
 --
 
 DROP TABLE IF EXISTS `desconto`;
@@ -82,11 +81,6 @@ CREATE TABLE IF NOT EXISTS `desconto` (
 --
 
 --
--- Truncate table before insert `desconto`
---
-
-TRUNCATE TABLE `desconto`;
---
 -- Extraindo dados da tabela `desconto`
 --
 
@@ -97,6 +91,8 @@ INSERT INTO `desconto` (`id_desconto`, `codprod`, `percentual`, `qtd_min`, `qtd_
 
 --
 -- Estrutura da tabela `localidade`
+--
+-- Criação: 31-Maio-2018 às 22:56
 --
 
 DROP TABLE IF EXISTS `localidade`;
@@ -113,11 +109,6 @@ CREATE TABLE IF NOT EXISTS `localidade` (
 --
 
 --
--- Truncate table before insert `localidade`
---
-
-TRUNCATE TABLE `localidade`;
---
 -- Extraindo dados da tabela `localidade`
 --
 
@@ -130,6 +121,8 @@ INSERT INTO `localidade` (`codlocal`, `nome`, `endereco`, `telefone`) VALUES
 
 --
 -- Estrutura da tabela `produto`
+--
+-- Criação: 31-Maio-2018 às 22:56
 --
 
 DROP TABLE IF EXISTS `produto`;
@@ -150,25 +143,22 @@ CREATE TABLE IF NOT EXISTS `produto` (
 --
 
 --
--- Truncate table before insert `produto`
---
-
-TRUNCATE TABLE `produto`;
---
 -- Extraindo dados da tabela `produto`
 --
 
 INSERT INTO `produto` (`codprod`, `codlocal`, `descricao`, `qtd_estoque`, `preco_unitario`) VALUES
-(1, 1, '\"Orégano\"', 170, '1.71'),
-(2, 1, 'Aifone 11', 45, '999.99'),
+(1, 1, '\"Orégano\"', 169, '1.71'),
+(2, 1, 'Aifone 11', 32, '999.99'),
 (3, 2, 'Sapato 42', 50, '89.99'),
-(4, 3, 'Pinga da Boa', 11, '39.93'),
-(5, 1, 'Café Extremamente Forte', 29, '15.10');
+(4, 3, 'Pinga da Boa', 8, '39.93'),
+(5, 1, 'Café Extremamente Forte', 24, '15.10');
 
 -- --------------------------------------------------------
 
 --
 -- Estrutura da tabela `venda`
+--
+-- Criação: 31-Maio-2018 às 22:56
 --
 
 DROP TABLE IF EXISTS `venda`;
@@ -194,11 +184,6 @@ CREATE TABLE IF NOT EXISTS `venda` (
 --       `produto` -> `codprod`
 --
 
---
--- Truncate table before insert `venda`
---
-
-TRUNCATE TABLE `venda`;
 --
 -- Constraints for dumped tables
 --
