@@ -4,10 +4,10 @@ Atividade Supervisionada da disciplina Desenvolvimento de Aplicações com Banco
 # Descrição
 Sistema desktop que corresponde a um módulo de Venda de um PDV.
 Desenvolvido com:
-* Java 8 (core)
+* Java 8
 * Java Swing (GUI)
-* Maven (controle de dependências)
-* MySQL (Persistência).
+* Maven (Controle de Dependências)
+* MySQL (BD).
 
 Padrões utilizados: DAO (Data Access Object) + MVC (Model-View-Controller).
 
