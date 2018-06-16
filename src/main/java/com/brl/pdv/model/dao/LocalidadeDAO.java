@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import com.brl.pdv.model.Localidade;
 import com.brl.pdv.model.dao.conexao.ConnectionFactory;
 
@@ -35,9 +37,9 @@ public class LocalidadeDAO {
 			rs.close();
 			stmt.close();
 			connection.close();
-		} catch (SQLException e) {
-			return null;
-		} catch (ClassNotFoundException e2) {
+		} catch (SQLException | ClassNotFoundException e) {
+			JOptionPane.showMessageDialog(null,
+					"Erro ao tentar executar tarefa\nDescrição do erro: " + e.getLocalizedMessage());
 			return null;
 		}
 		return localidade;
@@ -62,9 +64,9 @@ public class LocalidadeDAO {
 			rs.close();
 			stmt.close();
 			connection.close();
-		} catch (SQLException e) {
-			return null;
-		} catch (ClassNotFoundException e2) {
+		} catch (SQLException | ClassNotFoundException e) {
+			JOptionPane.showMessageDialog(null,
+					"Erro ao tentar executar tarefa\nDescrição do erro: " + e.getLocalizedMessage());
 			return null;
 		}
 		return localidades;

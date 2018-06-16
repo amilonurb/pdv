@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 import com.brl.pdv.model.Cliente;
 import com.brl.pdv.model.dao.conexao.ConnectionFactory;
 
@@ -37,10 +39,9 @@ public class ClienteDAO {
 			rs.close();
 			stmt.close();
 			connection.close();
-		} catch (SQLException e) {
-
-		} catch (ClassNotFoundException e2) {
-
+		} catch (SQLException | ClassNotFoundException e) {
+			JOptionPane.showMessageDialog(null,
+					"Erro ao tentar executar tarefa\nDescrição do erro: " + e.getLocalizedMessage());
 		}
 		return clientes;
 	}
@@ -61,9 +62,9 @@ public class ClienteDAO {
 			rs.close();
 			stmt.close();
 			connection.close();
-		} catch (SQLException e) {
-			return null;
-		} catch (ClassNotFoundException e2) {
+		} catch (SQLException | ClassNotFoundException e) {
+			JOptionPane.showMessageDialog(null,
+					"Erro ao tentar executar tarefa\nDescrição do erro: " + e.getLocalizedMessage());
 			return null;
 		}
 		return clienteAtualizado;

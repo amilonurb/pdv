@@ -93,11 +93,13 @@ public class JanelaNovaVenda extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 755, 600);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(255, 250, 250));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		panelCliente = new JPanel();
+		panelCliente.setBackground(new Color(255, 250, 250));
 		panelCliente.setBounds(10, 76, 719, 45);
 		panelCliente.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "", TitledBorder.CENTER,
 				TitledBorder.TOP, null, new Color(0, 0, 0)));
@@ -148,6 +150,7 @@ public class JanelaNovaVenda extends JFrame {
 		panelCliente.add(comboBoxLocalidade, gbc_comboBoxLocalidade);
 
 		panelProdutos = new JPanel();
+		panelProdutos.setBackground(new Color(255, 250, 250));
 		panelProdutos.setBounds(10, 132, 719, 120);
 		panelProdutos.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Escolher Produto",
 				TitledBorder.LEADING, TitledBorder.TOP, null, Color.ORANGE));
@@ -195,25 +198,29 @@ public class JanelaNovaVenda extends JFrame {
 		panelProdutos.add(btnExcluir);
 
 		lblGetDescricao = new JLabel("");
-		lblGetDescricao.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
+		lblGetDescricao.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblGetDescricao.setBounds(118, 70, 570, 27);
 		panelProdutos.add(lblGetDescricao);
 
 		panelTabelaVenda = new JPanel();
+		panelTabelaVenda.setBackground(new Color(255, 250, 250));
 		panelTabelaVenda.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Vendas",
 				TitledBorder.LEADING, TitledBorder.TOP, null, Color.ORANGE));
 		panelTabelaVenda.setBounds(10, 263, 719, 231);
 		panelTabelaVenda.setLayout(new BorderLayout(0, 0));
 		contentPane.add(panelTabelaVenda);
 		tabelaVenda = new JTable();
+		tabelaVenda.setBackground(new Color(248, 248, 255));
 		tabelaVenda.setModel(new DefaultTableModel(new Object[][] {},
 				new String[] { "Descrição", "Quantidade", "Preço 1x", "Total (c/ descontos)" }));
 		scrollTabelaVenda = new JScrollPane();
+		scrollTabelaVenda.setBackground(new Color(255, 250, 250));
 		scrollTabelaVenda.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		scrollTabelaVenda.setViewportView(tabelaVenda);
 		panelTabelaVenda.add(scrollTabelaVenda);
 
 		panelTotalCompra = new JPanel();
+		panelTotalCompra.setBackground(new Color(255, 250, 250));
 		panelTotalCompra.setBounds(10, 494, 719, 58);
 		contentPane.add(panelTotalCompra);
 		panelTotalCompra.setLayout(null);
@@ -257,12 +264,12 @@ public class JanelaNovaVenda extends JFrame {
 		lblPdvCadastro.setForeground(SystemColor.textHighlight);
 		lblPdvCadastro.setFont(new Font("Verdana", Font.BOLD, 23));
 		lblPdvCadastro.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPdvCadastro.setBounds(10, 11, 704, 45);
+		lblPdvCadastro.setBounds(20, 11, 709, 54);
 		contentPane.add(lblPdvCadastro);
 
 		lblBugs = new JLabel("<html><u>Bugs a serem corrigidos</u></html>");
 		lblBugs.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblBugs.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblBugs.setHorizontalAlignment(SwingConstants.LEFT);
 		lblBugs.setFont(new Font("Tahoma", Font.ITALIC, 10));
 		lblBugs.setBounds(604, 51, 125, 14);
 		contentPane.add(lblBugs);
@@ -333,9 +340,9 @@ public class JanelaNovaVenda extends JFrame {
 	private void atualizarTabela() {
 		DefaultTableModel modelo = (DefaultTableModel) tabelaVenda.getModel();
 		modelo.setRowCount(0);
-		for (Venda itemDeVenda : vendas) {
-			modelo.addRow(new Object[] { itemDeVenda.getProduto().getDescricao(), itemDeVenda.getQuantidade(),
-					formata(itemDeVenda.getProduto().getPreco()), formata(itemDeVenda.getValorTotal()) });
-		}
+		vendas.forEach(item -> {
+			modelo.addRow(new Object[] { item.getProduto().getDescricao(), item.getQuantidade(),
+					formata(item.getProduto().getPreco()), formata(item.getValorTotal()) });
+		});
 	}
 }

@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.swing.JOptionPane;
+
 import com.brl.pdv.model.Desconto;
 import com.brl.pdv.model.Produto;
 import com.brl.pdv.model.dao.conexao.ConnectionFactory;
@@ -35,10 +37,9 @@ public class DescontoDAO {
 			rs.close();
 			stmt.close();
 			connection.close();
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-			return null;
-		} catch (ClassNotFoundException e2) {
+		} catch (SQLException | ClassNotFoundException e) {
+			JOptionPane.showMessageDialog(null,
+					"Erro ao tentar executar tarefa\nDescrição do erro: " + e.getLocalizedMessage());
 			return null;
 		}
 		return desconto;

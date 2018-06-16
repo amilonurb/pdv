@@ -66,7 +66,8 @@ public class VendaDAO {
 			stmt.close();
 			connection.close();
 		} catch (SQLException | ClassNotFoundException e) {
-			System.out.println(e.getMessage());
+			JOptionPane.showMessageDialog(null,
+					"Erro ao tentar executar tarefa\nDescrição do erro: " + e.getLocalizedMessage());
 			return null;
 		}
 		return venda;
